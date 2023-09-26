@@ -52,12 +52,3 @@ display db "DAMNNNNNN... your dumbass got hacked and now your boot is hacked..."
 times 510 - ($ - $$) db 0 ; Zero remaining sectors
 dw 0xaa55 ; Bootable signature
 
-; Now let's try the program!
-; Nice! Let's try changing the color of the text!
-; Now let's try making a new line. We can not use "\n" since no such escapes are defined.
-; Instead, we'll have to use the raw number of it. \n's raw number is 10.
-; What happened? It did create a new line, however it continued moving forward along the horizontal axis.
-; This is because the \n character actually isn't a single character, (It is, however it can't be printed alone).
-; We need a vertical return character as well, \r, which returns the horizontal axis.
-; The raw number of the vertical return character is 13. Now let's try it!
-; It works!
