@@ -5,4 +5,4 @@
 * (please use in a vm and use responsibly)
 
 ##### | Not the most effective way to overwrite a mbr
-###### Im not replyable for your actions <3 
+###### Im not responsible for your actions <3 
